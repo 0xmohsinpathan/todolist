@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&family=Poppins&display=swap');
+
+html {font-family: 'Poppins', sans-serif;}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -91,7 +95,7 @@ body {
 }
 
 .button:hover::before {
-  font-size: 13px;
+  font-size: 15px;
   opacity: 1;
   transform: translateY(30px);
   transition-duration: .3s;
