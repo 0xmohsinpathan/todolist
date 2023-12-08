@@ -4,7 +4,6 @@ import { useState } from 'react'
 
 export default function Home() {
   const [Title, setTitle] = useState("");
-  const [todoId, setTodoId] = useState(Date.now());
   const [completed, setCompleted] = useState(false);
   const [Tasklist, setTasklist] = useState([]);
   const [deleteStyle, setDeleteStyle] = useState(" border-yellow-400 bg-yellow-100");
@@ -12,19 +11,25 @@ export default function Home() {
   const submitHandler = (elem) => {
     if (Title !== "") {
       elem.preventDefault();
-      setTasklist([...Tasklist, { title: Title, todoId: todoId, completed: completed, deleteStyle: deleteStyle }]);
+      setTasklist([{ title: Title, completed: completed, deleteStyle: deleteStyle }, ...Tasklist]);
       setTitle("");
     } else {
       elem.preventDefault();
     }
   }
 
-  const deleteStyleOnMouseLeaveHandler = () => {
-    setDeleteStyle(" border-yellow-400 bg-yellow-100")
+  const deleteStyleOnMouseLeaveHandler = (index) => {
+    let copyTasks = [...Tasklist];
+    copyTasks[index].deleteStyle = " border-yellow-400 bg-yellow-100";
+
+    setTasklist(copyTasks);
   }
 
-  const deleteStyleOnMouseEnterHandler = () => {
-    setDeleteStyle(" border-rose-700 bg-rose-400")
+  const deleteStyleOnMouseEnterHandler = (index) => {
+    let copyTasks = [...Tasklist];
+    copyTasks[index].deleteStyle = " border-rose-700 bg-rose-400";
+
+    setTasklist(copyTasks);
   }
 
   const deleteHandler = (index) => {
@@ -34,6 +39,20 @@ export default function Home() {
     setTasklist(copyTasks)
   }
 
+  const checkboxHandler = (index) => {
+    console.log("👌")
+    let copyTasks = [...Tasklist];
+    if (copyTasks[index].completed == false) {
+      copyTasks[index].deleteStyle = " border-green-700 bg-green-400";
+      copyTasks[index].completed = true;
+    } else {
+      copyTasks[index].deleteStyle = " border-yellow-400 bg-yellow-100";
+    }
+
+    setTasklist(copyTasks);
+  }
+
+
 
   function renderTasks() {
     let renderedTasks;
@@ -41,14 +60,21 @@ export default function Home() {
     if (Tasklist.length > 0) {
       renderedTasks = Tasklist.map((value, index) => (
         <div key={index} className='flex items-center justify-between relative'>
-          <div className={`flex justify-between items-center py-2 px-2 w-full my-2 mx-2  bg-opacity-10 border-opacity-25  border-2 rounded-md ${deleteStyle}`} >
+          <div className={`flex justify-between items-center py-2 px-2 w-full my-2 mx-2  bg-opacity-10 border-opacity-25  border-2 rounded-md duration-500 ${value.deleteStyle}`} >
             <div className='flex items-center me-4'>
-              <input type='checkbox' className='w-8 h-8 mr-6 accent-green-500' />
+              <div className="checkbox-wrapper-31 mr-6">
+                <input onChange={() => checkboxHandler(index)} type="checkbox" />
+                <svg viewBox="0 0 35.6 35.6">
+                  <circle className="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                  <circle className="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                  <polyline className="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                </svg>
+              </div>
               <div>
                 <p className='text-white text-2xl'>{value.title}</p>
               </div>
             </div>
-            <button onClick={() => { deleteHandler(index); deleteStyleOnMouseLeaveHandler(); }} onMouseEnter={() => { deleteStyleOnMouseEnterHandler() }} onMouseLeave={() => { deleteStyleOnMouseLeaveHandler() }} className='button'>
+            <button onClick={() => { deleteStyleOnMouseLeaveHandler(index); deleteHandler(index); }} onMouseEnter={() => { deleteStyleOnMouseEnterHandler(index) }} onMouseLeave={() => { deleteStyleOnMouseLeaveHandler(index) }} className='button'>
               <svg viewBox='0 0 448 512' className='svgIcon'>
                 <path d='M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z'></path>
               </svg>
