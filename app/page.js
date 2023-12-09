@@ -77,7 +77,7 @@ export default function Home() {
                 </svg>
               </div>
               <div>
-                <p className={`text-white text-2xl ${value.completed ? "line-through" : ""}`}>{value.title}</p>
+                <p className={`text-white text-2xl ${value.completed ? "line-through text-opacity-25" : ""}`}>{value.title}</p>
               </div>
             </div>
             <button onClick={() => { deleteStyleOnMouseLeaveHandler(index); deleteHandler(index); }} onMouseEnter={() => { deleteStyleOnMouseEnterHandler(index) }} onMouseLeave={() => { deleteStyleOnMouseLeaveHandler(index) }} className='button'>
