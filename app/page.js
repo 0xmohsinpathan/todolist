@@ -4,14 +4,15 @@ import { useState } from 'react'
 
 export default function Home() {
   const [Title, setTitle] = useState("");
-  const [completed, setCompleted] = useState(false);
+  const todoId = Date.now()
+  const completed = false;
+  const deleteStyle = " border-yellow-400 bg-yellow-100";
   const [Tasklist, setTasklist] = useState([]);
-  const [deleteStyle, setDeleteStyle] = useState(" border-yellow-400 bg-yellow-100");
-
+  
   const submitHandler = (elem) => {
     if (Title !== "") {
       elem.preventDefault();
-      setTasklist([{ title: Title, completed: completed, deleteStyle: deleteStyle }, ...Tasklist]);
+      setTasklist([{ title: Title, TodoId: todoId, completed: completed, deleteStyle: deleteStyle }, ...Tasklist]);
       setTitle("");
     } else {
       elem.preventDefault();
@@ -20,7 +21,11 @@ export default function Home() {
 
   const deleteStyleOnMouseLeaveHandler = (index) => {
     let copyTasks = [...Tasklist];
-    copyTasks[index].deleteStyle = " border-yellow-400 bg-yellow-100";
+    if (copyTasks[index].completed) {
+      copyTasks[index].deleteStyle = " border-green-700 bg-green-300";
+    } else {
+      copyTasks[index].deleteStyle = " border-yellow-400 bg-yellow-100";
+    }
 
     setTasklist(copyTasks);
   }
@@ -40,13 +45,14 @@ export default function Home() {
   }
 
   const checkboxHandler = (index) => {
-    console.log("👌")
+    
     let copyTasks = [...Tasklist];
     if (copyTasks[index].completed == false) {
-      copyTasks[index].deleteStyle = " border-green-700 bg-green-400";
+      copyTasks[index].deleteStyle = " border-green-700 bg-green-300";
       copyTasks[index].completed = true;
     } else {
       copyTasks[index].deleteStyle = " border-yellow-400 bg-yellow-100";
+      copyTasks[index].completed = false;
     }
 
     setTasklist(copyTasks);
@@ -63,7 +69,7 @@ export default function Home() {
           <div className={`flex justify-between items-center py-2 px-2 w-full my-2 mx-2  bg-opacity-10 border-opacity-25  border-2 rounded-md duration-500 ${value.deleteStyle}`} >
             <div className='flex items-center me-4'>
               <div className="checkbox-wrapper-31 mr-6">
-                <input onChange={() => checkboxHandler(index)} type="checkbox" />
+                <input checked={value.completed} onChange={() => checkboxHandler(index)} type="checkbox" />
                 <svg viewBox="0 0 35.6 35.6">
                   <circle className="background" cx="17.8" cy="17.8" r="17.8"></circle>
                   <circle className="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
@@ -71,7 +77,7 @@ export default function Home() {
                 </svg>
               </div>
               <div>
-                <p className='text-white text-2xl'>{value.title}</p>
+                <p className={`text-white text-2xl ${value.completed ? "line-through" : ""}`}>{value.title}</p>
               </div>
             </div>
             <button onClick={() => { deleteStyleOnMouseLeaveHandler(index); deleteHandler(index); }} onMouseEnter={() => { deleteStyleOnMouseEnterHandler(index) }} onMouseLeave={() => { deleteStyleOnMouseLeaveHandler(index) }} className='button'>
