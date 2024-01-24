@@ -4,14 +4,13 @@ import Image from 'next/image'
 import RenderTodo from './features/renderTodo';
 import TodoForm from './features/todoForm';
 
-export const Context = React.createContext();
+export const TodoContext = React.createContext();
 export default function Home() {
 
   const [Tasklist, setTasklist] = useState([]);
 
-
   return (
-    <Context.Provider value={ [Tasklist, setTasklist] }>
+    <TodoContext.Provider value={ [Tasklist, setTasklist] }>
       <main className="flex flex-col items-center min-h-screen p-24 pb-0 overflow-hidden background">
         <div className="z-10 items-center justify-between w-full max-w-5xl font-mono text-lg lg:flex">
           <p className={ ` ${Tasklist.length > 0 ? "hidden" : "flex"} fixed top-0 left-0 justify-center w-full pb-6 border-b border-gray-300 pt-14 bg-gradient-to-b from-zinc-200 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30` }>
@@ -34,6 +33,6 @@ export default function Home() {
         <TodoForm />
         <RenderTodo />
       </main>
-    </Context.Provider>
+    </TodoContext.Provider>
   )
 }
